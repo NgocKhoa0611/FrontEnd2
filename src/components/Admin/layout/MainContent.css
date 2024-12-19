@@ -1,0 +1,91 @@
+/* MainContent.css */
+
+.main-content {
+    padding: 20px;
+    padding-left: 240px; /* Để chừa không gian cho sidebar nếu có */
+    padding-top: 40px; /* Tránh bị che bởi header cố định */
+    background-color: #f9f9f9;
+    min-height: 100vh;
+  }
+  
+  .title-page {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .statistics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .statistics .statistic-card {
+    flex: 1 1 calc(25% - 16px); /* Chia đều cho 4 cột và có khoảng cách giữa các phần tử */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .statistics .statistic-card h4 {
+    font-size: 18px;
+    color: #ff9800; /* Màu vàng cho tiêu đề */
+    margin-bottom: 8px;
+  }
+  
+  .statistics .statistic-card p {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+  }
+  
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .col-sm-12 {
+    width: 100%;
+  }
+  
+  .col-md-6 {
+    flex: 1 1 calc(50% - 16px); /* Chia đều cho 2 cột với khoảng cách giữa các phần tử */
+  }
+  
+  .col-xl-3 {
+    flex: 1 1 calc(25% - 16px); /* Chia đều cho 4 cột với khoảng cách giữa các phần tử */
+  }
+  
+  .table-container {
+    background-color: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .table-container h4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+  
+  .table-container table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table-container th, .table-container td {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+  }
+  
+  .table-container th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+  }
+  

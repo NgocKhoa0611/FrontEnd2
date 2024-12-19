@@ -1,0 +1,61 @@
+/* General Pagination Style */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+.pagination button {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+/* Styling for active page */
+.pagination button.bg-blue-500 {
+  background-color: #3b82f6;
+  color: white;
+}
+.pagination button:hover {
+  background-color: #f0f0f0;
+}
+.pagination button:disabled {
+  cursor: not-allowed;
+  background-color: #e0e0e0;
+  border-color: #ccc;
+}
+/* Styling for previous and next buttons */
+.pagination button.rounded-l-lg {
+  border-radius: 4px 0 0 4px;
+}
+.pagination button.rounded-r-lg {
+  border-radius: 0 4px 4px 0;
+}
+.pagination button svg {
+  margin-right: 5px;
+}
+
+.slider {
+  height: 6px;
+  background: #ddd;
+  position: relative;
+  border-radius: 4px;
+}
+
+.thumb {
+  height: 20px;
+  width: 20px;
+  background: #007bff;
+  border-radius: 50%;
+  cursor: pointer;
+  position: absolute;
+  top: -7px;
+}
+
+.track {
+  background: #007bff;
+  height: 6px;
+}

@@ -1,0 +1,234 @@
+/* Checkout.css */
+.checkout-page h2{
+  font-weight: 400;
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.checkout-content {
+  display: flex;
+  gap: 20px;
+}
+  
+.checkout-info, .payment {
+  flex: 3;
+  padding: 20px;
+}
+
+.form-input {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+  width: 100%; /* Adjust width as needed */
+  transition: border-color 0.3s ease; /* Smooth transition */
+  margin-bottom: 20px;
+}
+
+.form-input:focus {
+  border-color: #333; /* Change to your desired focus color */
+  outline: none; /* Remove default outline */
+}
+
+
+.payment-methods {
+  border: 1px solid #ddd; /* Light border for the payment methods container */
+  border-radius: 5px; /* Rounded corners */
+}
+
+.payment-option {
+  display: flex;
+  align-items: center; /* Center align items vertically */
+  padding: 10px 15px; /* Padding for each payment option */
+  cursor: pointer; /* Change cursor on hover */
+  border-bottom: 1px solid #ddd;
+}
+
+.payment-option:last-child {
+  border-bottom: none;
+}
+
+.payment-option:hover {
+  background-color: #f0f0f0; /* Light background on hover */
+}
+
+.payment-option input[type="radio"] {
+  margin-right: 10px; /* Space between radio button and label */
+}
+
+.label-group {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+/* Order Summary Styling */
+
+.order-summary {
+  flex: 4;
+  margin-top: 10px;
+  padding: 0;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+.order-summary h2{
+  font-weight: 600;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 20px;
+}
+
+.cart-items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 20px;
+
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding: 15px 0;
+}
+
+.item-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-right: 15px;
+  border-radius: 5px;
+  border: 1px solid #333;
+}
+
+.item-details {
+  flex: 1;
+}
+
+.item-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.item-size {
+  display: block;
+  font-size: 0.9em;
+}
+
+.item-price {
+  color: #aaa;
+}
+
+.item-options {
+  font-size: 14px;
+  color: #555;
+}
+
+.discount-section {
+  margin: 20px;
+  display: flex;
+  gap: 30px;
+}
+
+.discount-input {
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px; 
+}
+
+.apply-discount-btn {
+  color: #fff;
+  background-color: #040f70;
+  border: 1px solid #ccc;
+  border-radius: 3px ; /* Rounded right corners */
+  padding: 5px 12px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.price-breakdown {
+  margin: 20px;
+  border-top: 1px solid #eee;
+  padding: 20px 0;
+  font-size: 0.9rem;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.price-row .price-right {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.total-price {
+  margin: 20px;
+  padding: 20px 0;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.total-price .price-right{
+  color: #aaa;
+}
+
+.checkout-button-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px;
+  font-size: 0.8rem;
+}
+
+.back-to-cart {
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: none;
+  color: #ddd; /* Example link color */
+}
+
+
+.place-order-btn {
+  color: #fff;
+  background-color: #040f70;
+  border: 1px solid #ccc;
+  border-radius: 3px ; /* Rounded right corners */
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+
+
+.success-message {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4caf50; /* Màu xanh lá cho thành công */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}

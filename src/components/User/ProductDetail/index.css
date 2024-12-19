@@ -1,0 +1,234 @@
+.product-detail {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  padding: 0 50px;
+  font-family: Arial, sans-serif;
+}
+
+.product-detail-top {
+  display: flex;
+  gap: 20px;
+}
+
+h1 {
+    font-weight: 500;
+    font-size: 1.5rem;
+}
+
+.product-image {
+  width: 49%;
+}
+
+.product-image img{
+    width: 100%;
+  }
+
+.product-info {
+  max-width: 800px;
+}
+
+.price {
+  margin: 20px 0;
+  font-size: 1.4em;
+  color: #333;
+}
+
+.options h4 {
+  font-weight: 500;
+  margin: 10px 0 5px;
+}
+
+.size-selection button {
+    margin: 15px 0;
+    margin-right: 20px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+
+.size-selection .active {
+  border-color: #333;
+}
+
+.color-selection {
+    margin-right: 20px;
+  }
+  
+  .color-options {
+    display: flex;
+    gap: 20px; /* Adjust spacing between buttons */
+  }
+  
+  .color-button {
+    margin: 15px 0;
+    border: 1px solid #ccc; /* Light border */
+    padding: 0; 
+    border-radius: 3px; /* Optional rounded corners */
+    cursor: pointer;  
+    background-color: transparent; /* Remove default button background */
+    display: flex;
+    align-items: center; 
+  }
+  
+  .color-image {
+    width: 30px; 
+    height: 30px; 
+    object-fit: contain; /* Ensure images fit within the size */
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-right: 1px solid #ccc;
+  }
+  
+  .color-name {
+    font-size: 0.8rem;
+    padding: 0 10px;
+  }
+  
+  /* Active/Selected State */
+  .color-button.active {
+    border-color: #333; /* Or your desired active color */
+    background-color: transparent;
+  }
+
+  .color-button:hover {
+    background-color: transparent;
+  }
+
+
+/* Quantity Selector Styling */
+.buy-container{
+    font-weight: 500;
+  }
+
+  .buy-container .buy-column{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+.buy-container h4{
+    font-weight: 500;
+  }
+
+.quantity-selector {
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 3px; 
+    width: fit-content;
+    margin: 10px 0;
+  }
+ 
+  
+  .quantity-selector button,
+  .quantity-selector span {
+    font-size: 1rem;
+    padding: 5px 10px;
+    text-align: center;
+    border: none; 
+    background-color: transparent; 
+    cursor: pointer;
+  }
+  
+  .quantity-selector span {
+    border-left: 1px solid #ccc; 
+    border-right: 1px solid #ccc;
+  }
+  
+  .quantity-selector button:hover {
+    background-color: #f0f0f0; 
+  }
+
+.buy-now,
+.add-to-cart {
+  padding: 8px;
+  margin-right: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #fff;
+  background-color: #0c056b;
+  border: none;
+  font-size: 0.8rem;
+}
+
+.contact-info {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.product-description {
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.product-description h3{
+    text-decoration: underline;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  /* CustomAlert.css */
+.custom-alert-overlay {
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: rgba(0, 0, 0, 0.5);
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 1000;
+}
+
+.custom-alert {
+background-color: white;
+padding: 20px;
+border-radius: 8px;
+width: 300px;
+text-align: center;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+animation: slideDown 0.4s ease;
+}
+
+.custom-alert p {
+font-size: 16px;
+margin-bottom: 10px;
+}
+
+.custom-alert button {
+padding: 8px 16px;
+background-color: #007bff;
+color: white;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+}
+
+.custom-alert button:hover {
+background-color: #0056b3;
+}
+
+@keyframes slideDown {
+from { transform: translateY(-20px); opacity: 0; }
+to { transform: translateY(0); opacity: 1; }
+}
+.buy-now {
+padding: 8px;
+margin-right: 10px;
+border-radius: 8px;
+cursor: pointer;
+color: #fff;
+background-color: #ff0000; /* Màu đỏ */
+border: none;
+font-size: 0.8rem;
+}
+
+.buy-now:hover {
+background-color: #cc0000; /* Màu đỏ đậm hơn khi hover */
+}

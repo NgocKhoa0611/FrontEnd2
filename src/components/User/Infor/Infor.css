@@ -1,0 +1,100 @@
+body,
+  input,
+  label {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+
+  .profile-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 700px;
+    max-width: 90%;
+  }
+
+  .profile-header {
+    background-color: #d19c97 !important;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .profile-name {
+    margin: 10px 0 5px;
+    font-size: 24px;
+  }
+
+  .profile-title {
+    margin: 0;
+    font-size: 16px;
+    color: #ddd;
+  }
+
+  .profile-content {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  .profile-image {
+    margin-right: 20px;
+  }
+
+  .profile-picture {
+    align-item: top-left;
+    border-radius: 10px;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border: 3px solid #d19c97 !important;
+  }
+
+  .profile-info {
+    flex: 1;
+    background: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+
+  .profile-info ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .profile-info label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .profile-info input[type="text"],
+  .profile-info input[type="email"],
+  .profile-info input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  .profile-info input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .profile-info input[type="submit"]:hover {
+    background: #0056b3;
+  }

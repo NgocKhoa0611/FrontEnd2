@@ -1,0 +1,235 @@
+.categories-table{
+  width: 100%;
+  margin: auto;
+  background-color: #fff;
+  padding-left: 260px;
+  padding-top: 27px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding-bottom: 15px;
+}
+.frmaddcate{
+  background-color: #fff;
+  padding-left: 260px;
+  padding-top: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding-bottom: 15px;
+}
+.frmaddcate .col{
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.form-control{
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-weight: normal;
+}
+.add-btn-categories{
+  color: #ffc107;
+  background-color: transparent;
+  border: 1px solid #ffc107;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  transition: all 0.2s ease;
+  margin: 6px 0;
+  text-decoration: none;
+}
+.add-btn-categories:hover{
+  background-color: #ffc107;
+  color: white;
+  border-color: #ffc107;
+}
+.btn-categories-list{
+  color: #0F3460;
+  background-color: transparent;
+  border: 1px solid #0F3460;
+  padding: 11px 16px 11px 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  transition: all 0.2s ease;
+  margin: 6px;
+  margin-top: 5px;
+  text-decoration: none;
+}
+.btn-categories-list:hover{
+  background-color: #0F3460;
+  color: white;
+  border-color: #0F3460;
+}
+.hide-btn-categories{
+  color: #FF4D4D;
+  background-color: transparent;
+  border: 1px solid #FF4D4D;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  transition: all 0.2s ease;
+  margin: 6px;
+}
+.hide-btn-categories:hover{
+  background-color: #FF4D4D;
+  color: white;
+  border-color: #FF4D4D;
+}
+.show-text{
+  color: gold;
+  border-color: gold;
+}
+.show-text:hover{
+  background-color: gold;
+  color: white;
+  border-color: gold;
+}
+.edit-btn-cate{
+  color: #0F3460;
+  background-color: transparent;
+  border: 1px solid #0F3460;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  transition: all 0.2s ease;
+  margin: 6px;
+  text-decoration: none;
+}
+.edit-btn-cate:hover{
+  background-color: #0F3460;
+  color: white;
+  border-color: #0F3460;
+}
+.frmeditcate{
+  background-color: #fff;
+  padding-left: 250px;
+  padding-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding-bottom: 15px;
+}
+.frmeditcate .col{
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.edit-btn-categories{
+  color: #ffc107;
+  background-color: transparent;
+  border: 1px solid #ffc107;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  transition: all 0.2s ease;
+  margin: 6px;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+}
+.edit-btn-categories:hover{
+  background-color: #ffc107;
+  color: white;
+  border-color: #ffc107;
+}
+.search-btn-catgories{
+  color: #0F3460;
+  background-color: transparent;
+  border: 1px solid #0F3460;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  transition: all 0.2s ease;
+  margin: 6px;
+  text-decoration: none;
+  margin-right: 10px;
+}
+.search-btn-catgories:hover{
+  background-color: #0F3460;
+  color: white;
+  border-color: #0F3460;
+}
+.d-flex{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.search-flex-cate{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.form-control-search-categories{
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid;
+  border-radius: 7px;
+  margin-left: auto;
+  margin-top: 5px;
+  margin-bottom: 7px;
+  padding: 10px;
+}
+.title-page-cate{
+  font-weight: bold;
+  padding: 10px;
+  padding-left: 0px;
+}
+.table-cate thead tr{
+  background-color: #0F3460;
+  color: white;
+}
+.table-cate th, .table-cate td{
+  padding: 12px 15px;
+  border: 1px solid #ddd; 
+}
+.table-cate tbody tr:hover{
+  background-color: #f1f1f1;
+  transition: background-color 0.3s ease;
+}
+.sort-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: 5px; /* Space between label and button */
+  color: #fff; /* Darker text color for better contrast */
+  transition: all 0.3s ease; /* Smooth transition for color and transformation */
+  padding: 5px 10px; /* Add some padding to make it clickable */
+  border-radius: 4px; /* Rounded corners for a smoother look */
+  position: absolute; /* Absolute positioning */
+  right: 10px; /* Align it to the right edge of the header */
+  top: 50%; /* Center it vertically */
+  transform: translateY(-50%); /* Adjust position to perfectly center vertically */
+}
+th {
+  position: relative;
+}
+.sort-btn:hover {
+  color: #FF4D4D;
+  transform: scale(1.1) translateY(-50%);
+}
+.sort-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px #FF4D4D;
+  color: #FF4D4D;
+}
+.sort-btn:active {
+  transform: scale(0.95) translateY(-50%); 
+  color: #FF4D4D; 
+}
