@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addCartDetail } from '../../../../redux/slices/cartslice';
@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API_URL } from "../../../../configs/varibles";
 
+// eslint-disable-next-line react/prop-types
 export default function Product({ shopItems = {} }) {
   const { product_id, product_name, price, price_promotion, detail = [] } = shopItems;
   const imageUrl = `${API_URL}/img/${detail[0]?.productImage?.img_url || 'default-image.jpg'}`;
@@ -17,9 +18,72 @@ export default function Product({ shopItems = {} }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-  };
+  useEffect(() => {
+
+    const checkFavoriteStatus = async () => {
+      const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+
+      if (!token) {
+          return;
+      }
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const user_id = payload.id;
+      try {
+        const response = await axios.get(`${API_URL}/favorite?user_id=${user_id}`);
+        const isProductFavorite = response.data.some(favorite => favorite.product.product_id === product_id);
+        setIsFavorite(isProductFavorite);
+      } catch (error) {
+        console.error("Error checking favorite status:", error);
+      }
+    };
+
+    checkFavoriteStatus();
+  }, [navigate, product_id]);
+  
+  const toggleFavorite = async () => {
+    const token = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("token="))
+    ?.split("=")[1];
+
+    if (!token) {
+        return;
+    }
+
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const user_id = payload.id;
+
+    if (!user_id) {
+        alert("Không tìm thấy thông tin người dùng!");
+        return;
+    }
+
+    try {
+        if (isFavorite) {
+            // Gọi API DELETE và truyền product_id qua URL
+            await axios.delete(`${API_URL}/favorite/${product_id}`, {
+                data: { user_id }, // Truyền user_id qua body
+            });
+            setIsFavorite(false);
+        } else {
+            // Thêm sản phẩm vào danh sách yêu thích
+            await axios.post(`${API_URL}/favorite`, { user_id, product_id });
+            setIsFavorite(true);
+            toast.success("Đã thêm sản phẩm vào danh sách yêu thích");
+        }
+    } catch (error) {
+        toast.error("Có lỗi khi thực hiện hành động yêu thích.");
+        console.error("Error toggling favorite:", error);
+    }
+};
+
+
+
+  
+  
 
   const handleProductAction = async (action) => {
     const token = document.cookie.split(';').find(cookie => cookie.trim().startsWith('token='));
@@ -30,9 +94,7 @@ export default function Product({ shopItems = {} }) {
     }
 
     try {
-      const productDetailResponse = await axios.get(`${API_URL}/product/${product_id}`, {
-        withCredentials: true,
-      });
+      const productDetailResponse = await axios.get(`${API_URL}/product/${product_id}`, { withCredentials: true });
       const productDetail = productDetailResponse.data.detail[0];
       const product = productDetailResponse.data;
 
@@ -51,9 +113,7 @@ export default function Product({ shopItems = {} }) {
         product_name: product.product_name
       };
 
-      const response = await axios.post(`${API_URL}/cart/add`, { newItem }, {
-        withCredentials: true,
-      });
+      const response = await axios.post(`${API_URL}/cart/add`, { newItem }, { withCredentials: true });
 
       dispatch(addCartDetail(newItem));
 
@@ -93,7 +153,6 @@ export default function Product({ shopItems = {} }) {
               aria-hidden="true"
             ></i>
           </div>
-
         </div>
         <div className="product-details p-4">
           <Link to={`/product/${product_id}`} className="">

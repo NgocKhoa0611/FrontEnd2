@@ -17,9 +17,11 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const [reviews, setReviews] = useState([]);
   const [comment, setComment] = useState("");
+  const [renderComment, setRenderComment] = useState(true)
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!renderComment) return;
     axios
     fetch(`${API_URL}/product/${id}`)
       .then(response => response.json())
@@ -37,12 +39,14 @@ const ProductDetails = () => {
       .then(response => response.json())
       .then(data => {
         console.log("Reviews:", data);
-        setReviews(data);  // Lưu bình luận vào state
+        setReviews(data.reverse());  // Lưu bình luận vào state
       })
       .catch(error => {
         console.error("Error fetching reviews:", error);
       });
-  }, [id]);
+
+    setRenderComment(false)
+  }, [id, renderComment]);
 
   const handleDetailSelect = (detailId) => {
     setSelectedDetailId(detailId);
@@ -84,8 +88,7 @@ const ProductDetails = () => {
         price: product.price,
         name: product.product_name,
       };
-
-      // Send POST request to add item to cart
+// Send POST request to add item to cart
       const response = await axios.post(
         `${API_URL}/cart/add`,
         { newItem },
@@ -189,11 +192,12 @@ const ProductDetails = () => {
 
       if (response.status === 201) {
         setComment(""); // Reset khung nhập
+        setRenderComment(true);
         toast.success("Gửi bình luận thành công!");
       }
     } catch (error) {
       console.error("Error sending comment:", error);
-      toast.error("Gửi bình luận thất bại!");
+toast.error("Gửi bình luận thất bại!");
     }
   };
 
@@ -277,7 +281,7 @@ const ProductDetails = () => {
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={handleBuyNow}
-              className="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors"
+className="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors"
             >
               Mua Ngay
             </button>
@@ -357,8 +361,7 @@ const ProductDetails = () => {
           )}
         </div>
       </div>
-
-      <Toaster position="top-center" />
+<Toaster position="top-center" />
       <RelateProduct />
     </div>
   );

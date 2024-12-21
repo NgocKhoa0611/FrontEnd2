@@ -18,6 +18,7 @@ import ForgotPassword from "../components/User/account/ForgotPassword.jsx";
 import ResetPassword from "../components/User/account/ResetPassword.jsx";
 import SuccessPage from "../pages/User/SuccessPage.jsx";
 import FailurePage from "../pages/User/FailurePage.jsx";
+import FavoritesPage from "../components/User/favorite/index.jsx";
 
 const UserRoutes = () => {
     return (
@@ -40,6 +41,9 @@ const UserRoutes = () => {
                 <Route path="/account/:userId" element={<Account />} />
                 <Route path="/successpage" element={<SuccessPage />} />
                 <Route path="/failurepage" element={<FailurePage />} />
+                <Route path="/favorite" element={<FavoritesPage />} />
+                <Route path="/favorite:id" element={<FavoritesPage />} />
+
                 <Route path="*" element={<NotFound />} />
             </Routes>
             <Footer />
