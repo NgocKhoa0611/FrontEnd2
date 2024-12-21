@@ -238,9 +238,9 @@ const Search = () => {
               </Link>
             )}
 
-            {/* <Link to="/favorites">
+            <Link to="/favorite">
               <i className="fa fa-heart text-xl hover:text-red-600"></i>
-            </Link> */}
+            </Link>
 
             <Link to="/cart" className="relative">
               <i className="fa fa-shopping-bag text-xl hover:text-green-600"></i>
