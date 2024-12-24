@@ -18,6 +18,7 @@ import LoginAdmin from '../components/Admin/account/LoginAdmin';
 import '../components/Admin/assets/styles/admin.css';
 import '../components/Admin/assets/styles/index.css';
 import OrderDetailList from "../components/Admin/orders/OrdersDetailList";
+import CommentManagement from "../components/Admin/review/review";
 
 const AdminRoutes = () => {
     const location = useLocation(); // Get the current path
@@ -45,6 +46,8 @@ const AdminRoutes = () => {
                     <Route path="/orders_detail/:id" element={<OrderDetailList />} />
                     <Route path="/orderslist/edit/:id" element={<OrdersEdit />} />
                     <Route path="/userslist" element={<UsersList />} />
+                    <Route path="/CommentManagement" element={<CommentManagement />} />
+                
                 </Routes>
             </div>
         </div>
