@@ -23,6 +23,7 @@ function Sidebar() {
           <li><Link to={`/admin/productlist`}>Quản lí sản phẩm</Link></li>
           <li><Link to={`/admin/orderslist`}>Quản lí đơn hàng</Link></li>
           <li><Link to={`/admin/userslist`}>Quản lí người dùng</Link></li>
+          <li><Link to={`/admin/CommentManagement`}>Quản lí bình luận</Link></li>
         </ul>
       </nav>
       <button className="logout-btn" onClick={handleLogout}>Đăng xuất</button>

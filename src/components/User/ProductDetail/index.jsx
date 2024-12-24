@@ -18,6 +18,7 @@ const ProductDetails = () => {
   const [reviews, setReviews] = useState([]);
   const [comment, setComment] = useState("");
   const [renderComment, setRenderComment] = useState(true)
+  const [userId, setUserId] = useState(null); // Thêm state để lưu user_id
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,13 +36,26 @@ const ProductDetails = () => {
       .finally(() => {
         setLoading(false);
       });
-    fetch(`${API_URL}/review/${id}`)  // API lấy bình luận
-      .then(response => response.json())
-      .then(data => {
-        console.log("Reviews:", data);
-        setReviews(data.reverse());  // Lưu bình luận vào state
+
+    // Lấy user_id từ token
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+
+    if (token) {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      setUserId(payload.id); // Lưu user_id vào state
+    }
+
+    if (!renderComment) return;
+
+    fetch(`${API_URL}/review/${id}`) // API lấy bình luận
+      .then((response) => response.json())
+      .then((data) => {
+        setReviews(data.reverse()); // Lưu bình luận vào state
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error fetching reviews:", error);
       });
 
@@ -155,26 +169,31 @@ const ProductDetails = () => {
       toast.error("Bình luận không được để trống!");
       return;
     }
-
+  
+    if (comment.length > 25) {
+      toast.error("Bình luận không được vượt quá 25 ký tự!");
+      return;
+    }
+  
     const token = document.cookie
       .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
-
+  
     if (!token) {
       alert("Bạn cần đăng nhập để bình luận!");
       navigate("/login");
       return;
     }
-
+  
     const payload = JSON.parse(atob(token.split('.')[1]));
     const userId = payload.id;
-
+  
     if (!userId) {
       alert("Không tìm thấy thông tin người dùng!");
       return;
     }
-
+  
     try {
       const newReview = {
         content: comment,
@@ -183,13 +202,13 @@ const ProductDetails = () => {
         user_id: userId,
       };
       console.log(newReview);
-
+  
       const response = await axios.post(`${API_URL}/review`, newReview, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
+  
       if (response.status === 201) {
         setComment(""); // Reset khung nhập
         setRenderComment(true);
@@ -197,9 +216,45 @@ const ProductDetails = () => {
       }
     } catch (error) {
       console.error("Error sending comment:", error);
-toast.error("Gửi bình luận thất bại!");
+      toast.error("Gửi bình luận thất bại!");
     }
   };
+  
+  const handleDeleteComment = async (reviewId) => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+  
+    if (!token) {
+      toast.error("Bạn cần đăng nhập để xóa bình luận!");
+      navigate("/login");
+      return;
+    }
+  
+    try {
+      const response = await axios.delete(`${API_URL}/review/${reviewId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Đảm bảo token được truyền vào header
+        },
+      });
+  
+      if (response.status === 200) {
+        toast.success("Xóa bình luận thành công!");
+        setReviews((prevReviews) => prevReviews.filter((review) => review.review_id !== reviewId));
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message || "Xóa bình luận thất bại!");
+      } else {
+        toast.error("Đã xảy ra lỗi khi xóa bình luận!");
+      }
+    }
+  };
+  
+
+  
 
   const selectedDetail = product.detail?.find(
     (detail) => detail.product_detail_id === Number(selectedDetailId)
@@ -281,7 +336,7 @@ toast.error("Gửi bình luận thất bại!");
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={handleBuyNow}
-className="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors"
+              className="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors"
             >
               Mua Ngay
             </button>
@@ -324,7 +379,7 @@ className="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transit
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            placeholder="Viết bình luận..."
+            placeholder="Bình luận không được vượt quá 25 ký tự!"
             className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[100px]"
           ></textarea>
           <button
@@ -337,28 +392,37 @@ className="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transit
 
         {/* Comments List */}
         <div className="space-y-6">
-          {reviews.length > 0 ? (
-            reviews.map((review) => (
-              <div key={review.review_id} className="border-b pb-6">
-                <div className="flex items-center gap-4 mb-4">
-                  <img
-                    src={`${API_URL}/avatar/${review?.user.avatar}`}
-                    alt="User Avatar"
-                    className="w-10 h-10 rounded-full object-cover mr-3"
-                  />
-                  <div>
-                    <p className="font-semibold">{review.user.name}</p>
-                    <p className="text-sm text-gray-500">
-                      {new Date(review?.date).toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-                <p className="text-gray-700">{review.content}</p>
-              </div>
-            ))
-          ) : (
-            <p className="text-center text-gray-500">Chưa có bình luận nào</p>
-          )}
+        {reviews.length > 0 ? (
+  reviews.map((review) => (
+    <div key={review.review_id} className="border-b pb-6">
+      <div className="flex items-center gap-4 mb-4">
+        <img
+          src={`${API_URL}/avatar/${review?.user.avatar}`}
+          alt="User Avatar"
+          className="w-10 h-10 rounded-full object-cover mr-3"
+        />
+        <div>
+          <p className="font-semibold">{review.user.name}</p>
+          <p className="text-sm text-gray-500">
+            {new Date(review?.date).toLocaleString()}
+          </p>
+        </div>
+        {review.user_id === userId && ( // Chỉ hiện nút xóa với bình luận của người dùng
+          <button
+            onClick={() => handleDeleteComment(review.review_id)}
+            className="text-red-500 hover:underline ml-auto"
+          >
+            Xóa
+          </button>
+        )}
+      </div>
+      <p className="text-gray-700">{review.content}</p>
+    </div>
+  ))
+) : (
+  <p className="text-center text-gray-500">Chưa có bình luận nào</p>
+)}
+
         </div>
       </div>
 <Toaster position="top-center" />

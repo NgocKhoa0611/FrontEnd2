@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import axios for making HTTP requests
 import { API_URL } from "../../../../configs/varibles";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 import Product from "../ui/Product"
 
 const FavoritesPage = () => {
@@ -91,6 +92,7 @@ const FavoritesPage = () => {
       <h1 className="text-2xl font-bold mb-4">Danh sách yêu thích của tôi</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {favorites.map(( favorite) => (
+
           <div key={favorite.product.product_id} className="bg-white rounded-lg shadow-md overflow-hidden">
             {/* Hiển thị ảnh sản phẩm bằng thẻ <img> */}
             {favorite?.product?.detail?.find(item => item.is_primary)?.productImage?.img_url ? (
@@ -106,8 +108,9 @@ const FavoritesPage = () => {
 
             <div className="p-4">
               {/* Tên sản phẩm */}
-              <h2 className="text-lg font-semibold mb-2">{favorite.product.product_name}</h2>
-
+                <Link to={`/product/${favorite?.product?.product_id}`}>
+                  <h2 className="text-lg font-semibold mb-2 line-clamp-1">{favorite.product.product_name}</h2>
+                </Link>
               {/* Giá sản phẩm */}
               <p className="text-gray-600">
                 {favorite.product.price_promotion > 0 ? (
@@ -125,7 +128,10 @@ const FavoritesPage = () => {
               </p>
 
               {/* Mô tả sản phẩm */}
-              <p className="text-sm text-gray-500 mt-2">{favorite.product.detail[0]?.description}</p>
+              <p className="text-sm text-gray-500 mt-2 line-clamp-2">
+              {favorite.product.detail[0]?.description}
+            </p>
+
 
               {/* Nút Xóa khỏi yêu thích */}
               <button
@@ -138,6 +144,7 @@ const FavoritesPage = () => {
           </div>
         ))}
       </div>
+
     </div>
   );
 };
