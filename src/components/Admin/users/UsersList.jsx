@@ -8,38 +8,56 @@ const UserTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchKeyword, setSearchKeyword] = useState(""); // Trạng thái lưu từ khóa tìm kiếm
   const [sortOrder, setSortOrder] = useState('asc');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const usersPerPage = 5;
 
+  // Lấy dữ liệu người dùng từ API
   const fetchUsers = async () => {
     try {
       const response = await axios.get(`${API_URL}/user`);
       setUsers(response.data);
+      setLoading(false);
     } catch (error) {
       console.error("Có lỗi khi lấy danh sách người dùng!", error);
+      setError("Có lỗi khi lấy danh sách người dùng!");
+      setLoading(false);
     }
   };
 
-  const handleDeleteUser = async (userId) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa người dùng này không?")) {
+  // Hàm xử lý khóa người dùng
+  const handleLockUser = async (userId, isLocked, role) => {
+    if (role === 'Admin') {
+      alert('Không thể khóa/mở khóa tài khoản admin!');
+      return;
+    }
+
+    if (window.confirm(`Bạn có chắc chắn muốn ${isLocked ? 'mở khóa' : 'khóa'} người dùng này?`)) {
       try {
-        await axios.delete(`${API_URL}/user/${userId}`);
-        setUsers(prevUsers => prevUsers.filter(user => user.user_id !== userId));
-        alert("Xóa người dùng thành công!");
+        const response = await axios.put(`${API_URL}/user/${userId}/lock`, { is_locked: !isLocked });
+        if (response.status === 200) {
+          setUsers(prevUsers => prevUsers.map(user =>
+            user.user_id === userId ? { ...user, is_locked: !isLocked } : user
+          ));
+          alert(`${isLocked ? 'Mở khóa' : 'Khóa'} người dùng thành công!`);
+        } else {
+          throw new Error('Failed to update user status');
+        }
       } catch (error) {
-        console.error("Có lỗi khi xóa người dùng!", error);
-        alert(`Có lỗi khi xóa người dùng: ${error.message}`);
+        console.error("Có lỗi khi khóa người dùng!", error);
+        alert(`Có lỗi khi ${isLocked ? 'mở khóa' : 'khóa'} người dùng: ${error.message}`);
       }
     }
   };
 
-  // Lọc người dùng dựa trên từ khóa tìm kiếm
+  // Lọc người dùng theo từ khóa tìm kiếm
   const filteredUsers = users.filter(user => {
     const userId = user?.user_id?.toString().toLowerCase() || ""; // Kiểm tra user_id an toàn
     const userName = user?.name?.toLowerCase() || ""; // Kiểm tra name an toàn
     return userId.includes(searchKeyword.toLowerCase()) || userName.includes(searchKeyword.toLowerCase());
   });
 
-
+  // Sắp xếp người dùng theo ID
   const sortedUsers = [...filteredUsers].sort((a, b) => {
     if (sortOrder === 'asc') {
       return a.user_id - b.user_id;
@@ -48,6 +66,7 @@ const UserTable = () => {
     }
   });
 
+  // Xử lý phân trang
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = sortedUsers.slice(indexOfFirstUser, indexOfLastUser);
@@ -70,13 +89,22 @@ const UserTable = () => {
     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
   };
 
+  // Lấy danh sách người dùng khi component được mount
   useEffect(() => {
     fetchUsers();
   }, []);
 
+  if (loading) {
+    return <div className="loading-indicator">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
+
   return (
     <div className="users-table">
-      <h2 class="text-3xl pb-4">Danh sách người dùng</h2>
+      <h2 className="text-3xl pb-4">Danh sách người dùng</h2>
       <div className="search-flex-users">
         <form className="d-flex" role="search" onSubmit={(e) => e.preventDefault()}>
           <input
@@ -84,8 +112,8 @@ const UserTable = () => {
             type="search"
             placeholder="Tìm kiếm theo ID hoặc Tên người dùng..."
             aria-label="Search"
-            value={searchKeyword} // Gắn giá trị của từ khóa tìm kiếm
-            onChange={(e) => setSearchKeyword(e.target.value)} // Cập nhật trạng thái từ khóa tìm kiếm
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
           />
           <button className="search-btn-users" type="button">Tìm kiếm</button>
         </form>
@@ -121,7 +149,12 @@ const UserTable = () => {
               <td>{user.phone}</td>
               <td>{new Date(user.registration_date).toLocaleString()}</td>
               <td>
-                <button className="delete-btn-users" disabled onClick={() => handleDeleteUser(user.user_id)}>Xóa</button>
+                <button
+                  className="lock-btn-users"
+                  onClick={() => handleLockUser(user.user_id, user.is_locked, user.role === 0 ? 'User' : 'Admin')}
+                >
+                  {user.is_locked ? 'Mở khóa' : 'Khóa'}
+                </button>
               </td>
             </tr>
           ))}

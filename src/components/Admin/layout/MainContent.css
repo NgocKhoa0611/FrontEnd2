@@ -88,4 +88,9 @@
     background-color: #f5f5f5;
     font-weight: bold;
   }
-  
+  .chart-container {
+    position: relative;
+    width: 75%; /* Điều chỉnh kích thước theo ý muốn */
+    height: 75%; /* Điều chỉnh kích thước theo ý muốn */
+    margin: 0 auto; /* Căn giữa biểu đồ */
+  }

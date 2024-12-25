@@ -1,48 +1,73 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios';
-import './Products.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import '../products/DetailAdd.css'; 
 import { API_URL } from "../../../../configs/varibles";
 
-function DetailAdd() {
-  const [detail, setDetail] = useState({
-    size_id: '',
-    color_id: '',
-    description: '',
-    product_id: '',
-    isFeature: '',
-    isHot: ''
+const ProductForm = () => {
+  const [formData, setFormData] = useState({
+    id: "",
+    detail: "",
+    colorName: "",
+    sizeName: "",
+    quantity: 0,
+    description: "",
+    image: null,
+    isFeatured: false,
+    isHot: false,
+    category_id: "",
+    price: "",
+    price_promotion: 0,
   });
-  const [sizes, setSizes] = useState([]);
-  const navigate = useNavigate();
 
-  // Lấy danh sách danh mục
+  const [categories, setCategories] = useState([]);
+
   useEffect(() => {
-    axios.get(`${API_URL}/size`)
+    axios.get(`${API_URL}/category`)
       .then((response) => {
-        setSizes(response.data);
+        setCategories(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching categories:', error);
-        alert("Có lỗi xảy ra khi tải size. Vui lòng thử lại sau.");
+        console.error("Error fetching categories:", error);
+        alert("Có lỗi xảy ra khi tải danh mục. Vui lòng thử lại sau.");
       });
   }, []);
 
-  const submitDuLieu = (e) => {
-    e.preventDefault();
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
-    axios.post(`${API_URL}/detail`, detail)
+  const handleImageChange = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      image: e.target.files[0],
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+    // Add logic to send formData to your API or handle it accordingly
+    axios.post(`${API_URL}/product`, formData)
       .then((response) => {
         alert("Đã thêm sản phẩm thành công!");
-        setDetail({
-          size_id: '',
-          color_id: '',
-          description: '',
-          product_id: '',
-          isFeature: '',
-          isHot: ''
+        setFormData({
+          id: "",
+          detail: "",
+          colorName: "",
+          sizeName: "",
+          quantity: 0,
+          description: "",
+          image: null,
+          isFeatured: false,
+          isHot: false,
+          category_id: "",
+          price: "",
+          price_promotion: 0,
         });
-        navigate(`/admin/productdetaillist/${product_id}`);
       })
       .catch((error) => {
         console.error("Lỗi khi thêm sản phẩm:", error);
@@ -50,72 +75,139 @@ function DetailAdd() {
       });
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProduct(prevProduct => ({
-      ...prevProduct,
-      [name]: name === 'price' || name === 'price_promotion'
-        ? (value === '' ? 0 : parseInt(value, 10))
-        : value
-    }));
-  };
-
   return (
-    <form id="frmaddproduct" className="frmaddproduct" onSubmit={submitDuLieu}>
-      <h2>Thêm chi tiết sản phẩm</h2>
-      <div className='col'>Tên sản phẩm:
+    <form onSubmit={handleSubmit} className="form-container">
+      <h2 className="form-title">Thêm sản phẩm</h2>
+      <div className="form-group">
+        <label className="form-label">ID Chi tiết</label>
         <input
-          value={product.product_name}
           type="text"
-          className="form-control"
-          name="product_name"
+          name="id"
+          value={formData.id}
           onChange={handleChange}
+          className="form-input"
           required
         />
       </div>
-      <div className='col'>Size:
+      <div className="form-group">
+        <label className="form-label">Tên màu</label>
+        <input
+          type="text"
+          name="colorName"
+          value={formData.colorName}
+          onChange={handleChange}
+          className="form-input"
+          required
+        />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Tên kích cỡ</label>
+        <input
+          type="text"
+          name="sizeName"
+          value={formData.sizeName}
+          onChange={handleChange}
+          className="form-input"
+          required
+        />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Số lượng</label>
+        <input
+          type="number"
+          name="quantity"
+          value={formData.quantity}
+          onChange={handleChange}
+          className="form-input"
+          required
+        />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Mô tả</label>
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          className="form-input"
+        ></textarea>
+      </div>
+      <div className="form-group">
+        <label className="form-label">Hình ảnh</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="form-input"
+        />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Danh mục</label>
         <select
-          className="form-control"
+          className="form-input"
           name="category_id"
-          value={product.category_id}
+          value={formData.category_id}
           onChange={handleChange}
           required
         >
-          <option value="">Chọn size</option>
-          {sizes.map(size => (
-            <option key={sizes.size_id} value={sizes.size_id}>
-              {sizes.size_name}
+          <option value="">Chọn danh mục</option>
+          {categories.map((category) => (
+            <option key={category.category_id} value={category.category_id}>
+              {category.category_name}
             </option>
           ))}
         </select>
       </div>
-      <div className='col'>Giá:
+      <div className="form-group">
+        <label className="form-label">Giá</label>
         <input
-          value={product.price}
+          value={formData.price}
           type="number"
-          className="form-control"
           name="price"
           onChange={handleChange}
+          className="form-input"
           required
         />
       </div>
-      <div className='col'>Giá khuyến mãi:
+      <div className="form-group">
+        <label className="form-label">Giá khuyến mãi</label>
         <input
-          value={product.price_promotion}
+          value={formData.price_promotion}
           type="number"
-          className="form-control"
           name="price_promotion"
           onChange={handleChange}
+          className="form-input"
           min="0"
         />
       </div>
-
-      <div className="mb-3">
-        <button className="add-btn-products" type="submit">Thêm sản phẩm</button> &nbsp;
-        <Link to={`/product`} className="btn-products-list">Danh sách sản phẩm</Link>
+      <div className="form-check">
+        <input
+          type="checkbox"
+          name="isFeatured"
+          checked={formData.isFeatured}
+          onChange={handleChange}
+          className="form-checkbox"
+          id="isFeatured"
+        />
+        <label className="form-checkbox-label" htmlFor="isFeatured">
+          isFeatured
+        </label>
       </div>
+      <div className="form-check">
+        <input
+          type="checkbox"
+          name="isHot"
+          checked={formData.isHot}
+          onChange={handleChange}
+          className="form-checkbox"
+          id="isHot"
+        />
+        <label className="form-checkbox-label" htmlFor="isHot">
+          isHot
+        </label>
+      </div>
+      <button type="submit" className="form-button">Thêm sản phẩm</button>
     </form>
   );
-}
+};
 
-export default DetailAdd;
+export default ProductForm;
