@@ -39,8 +39,14 @@ const Account = () => {
       const response = await axios.get(`${API_URL}/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
-        }
+        },
       });
+      console.log("User data:", user);
+      console.log("Selected tab:", selectedTab);
+      console.log("New avatar:", newAvatar);
+      console.log("Form data:", formData);
+      console.log("Orders:", orders);
+
 
       setUser(response.data);
       setFormData({
