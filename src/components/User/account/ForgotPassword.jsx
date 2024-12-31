@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { z } from 'zod';  // Import Zod
 import axios from 'axios';
 import { API_URL } from "../../../../configs/varibles";
 
@@ -10,9 +10,24 @@ const ForgotPassword = () => {
         initialValues: {
             email: '',
         },
-        validationSchema: Yup.object({
-            email: Yup.string().email('Email không hợp lệ').required('Bắt buộc'),
-        }),
+        validate: (values) => {
+            // Định nghĩa schema Zod cho form validation
+            const schema = z.object({
+                email: z.string().email('Email không hợp lệ').nonempty('Bắt buộc'),
+            });
+
+            // Dùng Zod để validate dữ liệu
+            const result = schema.safeParse(values);
+            if (!result.success) {
+                // Chuyển đổi lỗi từ Zod thành lỗi của formik
+                const errors = {};
+                result.error.errors.forEach((err) => {
+                    errors[err.path[0]] = err.message;
+                });
+                return errors;
+            }
+            return {};
+        },
         onSubmit: async (values, { setSubmitting, setFieldError }) => {
             try {
                 const response = await axios.post(`${API_URL}/auth/forgot-password`, {

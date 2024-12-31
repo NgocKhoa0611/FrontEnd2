@@ -1,9 +1,29 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
+import { z } from "zod";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../../../configs/varibles";
+
+// Zod Validation Schema
+const registerSchema = z.object({
+  name: z.string().min(2, "Tên phải có ít nhất 2 ký tự").nonempty("Vui lòng nhập tên"),
+  phone: z.string().regex(/^\d{10,11}$/, "Số điện thoại không hợp lệ").nonempty("Vui lòng nhập số điện thoại"),
+  address: z.string().nonempty("Vui lòng nhập địa chỉ"),
+  email: z.string().email("Email không hợp lệ").nonempty("Vui lòng nhập email"),
+  password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự").nonempty("Vui lòng nhập mật khẩu"),
+  confirmPassword: z.string().nonempty("Vui lòng nhập mật khẩu xác nhận"),
+}).superRefine((data, ctx) => {
+  if (data.password !== data.confirmPassword) {
+    ctx.addIssue({
+      path: ['confirmPassword'],
+      message: 'Mật khẩu xác nhận không khớp',
+      code: z.ZodIssueCode.custom,
+    });
+  }
+});
+
+
 
 const Register = () => {
   const [success, setSuccess] = useState(false);
@@ -19,24 +39,18 @@ const Register = () => {
       password: "",
       confirmPassword: "",
     },
-    validationSchema: Yup.object({
-      name: Yup.string()
-        .min(2, "Tên phải có ít nhất 2 ký tự")
-        .required("Vui lòng nhập tên"),
-      phone: Yup.string()
-        .matches(/^\d{10,11}$/, "Số điện thoại không hợp lệ")
-        .required("Vui lòng nhập số điện thoại"),
-      address: Yup.string().required("Vui lòng nhập địa chỉ"),
-      email: Yup.string()
-        .email("Email không hợp lệ")
-        .required("Vui lòng nhập email"),
-      password: Yup.string()
-        .min(6, "Mật khẩu phải có ít nhất 6 ký tự")
-        .required("Vui lòng nhập mật khẩu"),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref("password"), null], "Mật khẩu xác nhận không khớp")
-        .required("Vui lòng nhập mật khẩu xác nhận"),
-    }),
+    validate: (values) => {
+      const result = registerSchema.safeParse(values);
+      const errors = {};
+
+      if (!result.success) {
+        result.error.errors.forEach((err) => {
+          errors[err.path[0]] = err.message;
+        });
+      }
+
+      return errors;
+    },
     onSubmit: async (values) => {
       try {
         const response = await axios.post(`${API_URL}/auth/register`, {
