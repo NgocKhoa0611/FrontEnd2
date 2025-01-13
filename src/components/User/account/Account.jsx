@@ -15,14 +15,80 @@ const Account = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [vouchers, setVoucher] = useState([]);
+  const [isVoucherShared, setIsVoucherShared] = useState(false);  // New state
+
+
+
 
   useEffect(() => {
     const token = document.cookie.split("; ").find(row => row.startsWith("token="));
     if (token) {
       fetchUser();
       fetchOrderHistory();
+      handleShareVoucher();
     }
   }, []);
+
+  
+  
+
+
+// Chia sẻ voucher
+const handleShareVoucher = async () => {
+  try {
+    const token = document.cookie.split("; ").find(row => row.startsWith("token="))?.split("=")[1];
+    if (!token) return;
+
+    // Gọi API để nhận voucher sau khi chia sẻ
+    const response = await axios.get(`${API_URL}/vouchers`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    });
+
+    if (response.data && response.data.length > 0) {
+      setVoucher(response.data); // Lưu voucher nhận được vào state vouchers
+      setIsVoucherShared(true); // Đánh dấu đã chia sẻ và nhận voucher
+    } else {
+      alert("Không thể nhận voucher. Vui lòng thử lại.");
+    }
+  } catch (error) {
+    console.error("Error sharing voucher:", error);
+  }
+};
+
+  
+  
+
+// Xóa voucher
+const handleDeleteVoucher = async () => {
+  try {
+    const token = document.cookie.split("; ").find(row => row.startsWith("token="))?.split("=")[1];
+    if (!token) return;
+
+    // Gọi API để xóa voucher
+    const response = await axios.delete(`${API_URL}/vouchers`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      alert('Voucher đã được xóa thành công!');
+      // Cập nhật lại danh sách voucher sau khi xóa
+      setVoucher(vouchers.filter(voucher => voucher.id !== voucherId));
+    }
+  } catch (error) {
+    console.error("Error deleting voucher:", error);
+    alert('Có lỗi khi xóa voucher. Vui lòng thử lại.');
+  }
+};
+
+  
+  
 
   const fetchUser = async () => {
     try {
@@ -39,8 +105,14 @@ const Account = () => {
       const response = await axios.get(`${API_URL}/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
-        }
+        },
       });
+      console.log("User data:", user);
+      console.log("Selected tab:", selectedTab);
+      console.log("New avatar:", newAvatar);
+      console.log("Form data:", formData);
+      console.log("Orders:", orders);
+
 
       setUser(response.data);
       setFormData({
@@ -191,6 +263,17 @@ const Account = () => {
                   Lịch sử đơn hàng
                 </button>
               </li>
+              <li>
+                <button
+                  onClick={() => setSelectedTab("vouchers")}
+                  className={`text-[#0f3460] hover:text-[#072344] font-semibold p-2 rounded-md transition duration-300 w-full
+                    ${selectedTab === "vouchers" ? "bg-blue-100 text-blue-700" : "text-gray-600"}`}
+                >
+                  Mã giảm giá của bạn 
+                </button>
+              </li>
+
+
             </ul>
           </div>
 
@@ -320,6 +403,72 @@ const Account = () => {
                 </div>
               </div>
             )}
+
+
+
+{selectedTab === "vouchers" && !isVoucherShared && (
+  <div id="voucher-share" className="space-y-6">
+    <h2 className="text-xl font-bold text-gray-800">Nhận Voucher</h2>
+    <button
+      onClick={handleShareVoucher}
+      className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700"
+    >
+      Chia sẻ để nhận voucher
+    </button>
+  </div>
+)}
+
+{selectedTab === "vouchers" && isVoucherShared && (
+  <div id="voucher-history" className="space-y-6">
+    <h2 className="text-xl font-bold text-gray-800">Voucher của bạn</h2>
+    <div className="table-container">
+      <table className="w-full table-auto">
+        <thead>
+          <tr className="text-left">
+            <th className="px-2 py-2 font-semibold text-sm text-gray-700">Mã Voucher</th>
+            <th className="px-4 py-2 font-semibold text-sm text-gray-700">% giảm giá</th>
+            <th className="px-4 py-2 font-semibold text-sm text-gray-700">Ngày Hết Hạn</th>
+            <th className="px-4 py-2 font-semibold text-sm text-gray-700">Hành động</th> {/* Thêm cột hành động */}
+          </tr>
+        </thead>
+        <tbody>
+          {vouchers.length > 0 ? (
+            vouchers.map(voucher => (
+              <tr key={voucher.id} className="border-b">
+                <td className="px-2 py-1">{voucher.code}</td>
+                <td className="px-4 py-2">{voucher.discount_amount}%</td>
+                <td className="px-4 py-2">
+                  {new Date(voucher.expiration_date).toLocaleDateString('vi-VN', {
+                    timeZone: 'UTC',
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                  })}
+                </td>
+                <td className="px-4 py-2">
+                  <button
+                    className="text-red-500 hover:text-red-700"
+                    onClick={() => handleDeleteVoucher(voucher.id)} // Gọi hàm xóa khi nhấn nút
+                  >
+                    Xóa
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="4" className="text-center py-4">Không có voucher nào.</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  </div>
+)}
+
+
+
+
 
             {/* Modal for Order Details */}
             {modalOpen && selectedOrder && (

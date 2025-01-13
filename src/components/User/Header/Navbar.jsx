@@ -105,6 +105,11 @@ const Navbar = () => {
               <Link to="/contact" className="text-gray-700 hover:text-[#0f3460]">
                 Liên hệ
               </Link>
+              <Link
+                to="/voucher" className="text-gray-700 hover:text-[#0f3460]"
+              >
+                Sự kiện ưu đãi
+              </Link>
             </div>
           )}
 
@@ -165,6 +170,12 @@ const Navbar = () => {
                 className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
               >
                 Liên hệ
+              </Link>
+              <Link
+                to="/d"
+                className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+              >
+                Sự kiện ưu đãi
               </Link>
             </div>
           </div>

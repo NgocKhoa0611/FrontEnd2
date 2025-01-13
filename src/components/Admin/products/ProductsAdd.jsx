@@ -38,8 +38,9 @@ function ProductAdd() {
           category_id: '',
           price: '',
           price_promotion: 0,
+          img_url: ''
         });
-        navigate('/admin/productlist');
+        navigate('/productlist');
       })
       .catch((error) => {
         console.error("Lỗi khi thêm sản phẩm:", error);
@@ -59,7 +60,7 @@ function ProductAdd() {
 
   return (
     <form id="frmaddproduct" className="frmaddproduct" onSubmit={submitDuLieu}>
-      <h2 class="text-3xl pb-4">Thêm sản phẩm</h2>
+      <h2 className="text-3xl pb-4">Thêm sản phẩm</h2>
       <div className='col'>Tên sản phẩm:
         <input
           value={product.product_name}
@@ -106,10 +107,20 @@ function ProductAdd() {
           min="0"
         />
       </div>
+      <div className='col'>URL hình ảnh:
+        <input
+          value={product.img_url}
+          type="text"
+          className="form-control"
+          name="img_url"
+          onChange={handleChange}
+          required
+        />
+      </div>
 
       <div className="mb-3">
         <button className="add-btn-products" type="submit">Thêm sản phẩm</button> &nbsp;
-        <Link to={`/admin/productlist`} className="btn-products-list">Danh sách sản phẩm</Link>
+        <Link to={`/product`} className="btn-products-list">Danh sách sản phẩm</Link>
       </div>
     </form>
   );

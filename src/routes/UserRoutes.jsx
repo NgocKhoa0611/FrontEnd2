@@ -19,6 +19,7 @@ import ResetPassword from "../components/User/account/ResetPassword.jsx";
 import SuccessPage from "../pages/User/SuccessPage.jsx";
 import FailurePage from "../pages/User/FailurePage.jsx";
 import FavoritesPage from "../components/User/favorite/index.jsx";
+import Voucher from "../pages/User/Voucher.jsx";
 
 const UserRoutes = () => {
     return (
@@ -43,6 +44,8 @@ const UserRoutes = () => {
                 <Route path="/failurepage" element={<FailurePage />} />
                 <Route path="/favorite" element={<FavoritesPage />} />
                 <Route path="/favorite:id" element={<FavoritesPage />} />
+                <Route path="/voucher" element={<Voucher />} />
+
 
                 <Route path="*" element={<NotFound />} />
             </Routes>

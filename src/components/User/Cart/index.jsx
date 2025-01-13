@@ -157,7 +157,7 @@ const Cart = () => {
     } catch (error) {
       // Show error toast
       toast.dismiss(confirmToast); // Dismiss the loading toast
-      toast.error("Lỗi khi xóa sản phẩm!", {
+      toast.error("Lỗi khi xóa sản phẩm!", {  
         autoClose: 3000,
       });
       console.error('Error removing item:', error);

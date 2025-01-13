@@ -11,8 +11,7 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(12);
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(10000000);
+  const [priceOption, setPriceOption] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
@@ -36,14 +35,22 @@ const Products = () => {
     fetchData();
   }, []);
 
-  const filteredProducts = products.filter((product) => {
-    const isPriceInRange = (product.price_promotion >= minPrice && product.price_promotion <= maxPrice) ||
-      (product.price >= minPrice && product.price <= maxPrice);
-    const isCategoryMatch = selectedCategory ? product.category_id === selectedCategory : true;
-    const isNotHidden = product.is_hidden === 0;
-
-    return isPriceInRange && isCategoryMatch && isNotHidden;
-  });
+  const filteredProducts = [...products]
+    .filter((product) => {
+      const isCategoryMatch = selectedCategory ? product.category_id === selectedCategory : true;
+      const isNotHidden = product.is_hidden === 0;
+      return isCategoryMatch && isNotHidden;
+    })
+    .sort((a, b) => {
+      const priceA = a.price_promotion || a.price;
+      const priceB = b.price_promotion || b.price;
+      if (priceOption === "low") {
+        return priceA - priceB;
+      } else if (priceOption === "high") {
+        return priceB - priceA;
+      }
+      return 0;
+    });
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -87,29 +94,24 @@ const Products = () => {
           </select>
         </div>
 
-
-        {/* Bộ lọc theo khoảng giá */}
-        <div className="price-filter mb-4">
-          <label>Khoảng Giá:</label>
-          <div className="flex items-center">
-            <input
-              type="range"
-              min="0"
-              max="10000000"
-              step="50000"
-              value={minPrice}
-              onChange={(e) => {
-                setMinPrice(Number(e.target.value));
-                setMaxPrice(Math.max(Number(e.target.value), maxPrice));
-                setCurrentPage(1);
-              }}
-              className="w-full"
-            />
-          </div>
-          <div className="flex justify-between text-sm text-gray-500">
-            <span>{minPrice.toLocaleString('vi-VN')} VND</span>
-            <span>{maxPrice.toLocaleString('vi-VN')} VND</span>
-          </div>
+        {/* Price Filter */}
+        <div className="price-filter">
+          <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
+            Giá:
+          </label>
+          <select
+            id="price"
+            value={priceOption}
+            onChange={(e) => {
+              setPriceOption(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="all">Tất cả</option>
+            <option value="low">Giá thấp đến cao</option>
+            <option value="high">Giá cao đến thấp</option>
+          </select>
         </div>
       </div>
     </div>
