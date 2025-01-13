@@ -30,6 +30,9 @@ const Checkout = () => {
   const [user, setUser] = useState(null);
   const total = totalPrice + shippingFee;
 
+  
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,6 +55,7 @@ const Checkout = () => {
       return () => clearTimeout(timer);
     }
   }, [orderSuccess]);
+  
 
   const fetchUserData = async () => {
     try {
@@ -385,10 +389,15 @@ const Checkout = () => {
                   <span>Phí vận chuyển</span>
                   <span>{formatCurrency(shippingFee)}</span>
                 </div>
-                <div className="flex justify-between font-semibold text-lg pt-3 border-t">
-                  <span>Tổng cộng</span>
-                  <span>{formatCurrency(total)}</span>
+                <div>
+                  
+                  {/* Hiển thị thông tin tổng cộng */}
+                  <div className="flex justify-between font-semibold">
+                    <span>Tổng cộng</span>
+                    <span>{formatCurrency(total)}</span>
+                  </div>
                 </div>
+
               </div>
 
               {/* Action Buttons */}

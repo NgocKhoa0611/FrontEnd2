@@ -10,7 +10,6 @@ function ProductDetailList() {
   const [sortOrder, setSortOrder] = useState('asc');
   const productsPerPage = 10; // Số sản phẩm trên mỗi trang
   const { id } = useParams();
-  const imageUrl = `${API_URL}/img/${detail[0]?.productImage?.img_url || 'default-image.jpg'}`;
 
   const fetchProductDetail = async () => {
     try {
@@ -22,7 +21,6 @@ function ProductDetailList() {
       setDetail([]); // Set detail to an empty array in case of an error
     }
   };
-
 
   useEffect(() => {
     fetchProductDetail();
@@ -57,31 +55,11 @@ function ProductDetailList() {
     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
   };
 
-  const hideProduct = async (product_detail_id, is_hidden) => {
-    const newStatus = is_hidden ? "show" : "hide";
-    if (window.confirm(`Bạn có chắc chắn muốn ${newStatus} sản phẩm này?`)) {
-      try {
-        const response = await axios.patch(`${API_URL}/product/${newStatus}/${product_detail_id}`, {}, {
-          headers: { 'Content-Type': 'application/json' }
-        });
-
-        if (response.status === 200) {
-          console.log(`Sản phẩm đã được ${newStatus} thành công`);
-          fetchProductDetail(); // Cập nhật danh sách sản phẩm
-        } else {
-          console.error("Lỗi khi thay đổi trạng thái sản phẩm");
-        }
-      } catch (error) {
-        console.error("Error changing product status:", error);
-      }
-    }
-  };
-
   return (
     <div className="products-table">
       <h3 className="title-page">Danh sách chi tiết sản phẩm</h3>
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <Link to={`add-detail`} id="mb-2" className="add-btn-products">Thêm chi tiết</Link>
+      <Link to={`/admin/productdetaillist/add-detail/${id}`} id="mb-2" className="add-btn-products">Thêm chi tiết</Link>
       </div>
 
       <table className="table table-hover">
@@ -95,7 +73,11 @@ function ProductDetailList() {
             </th>
             <th>Tên màu</th>
             <th>Tên kích cỡ</th>
-            <th>Hình ảnh sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Mô tả</th>
+            <th>Hình ảnh</th>
+            <th>isFeatured</th>
+            <th>isHot</th>
             <th>Công cụ</th>
           </tr>
         </thead>
@@ -106,19 +88,20 @@ function ProductDetailList() {
                 <td>{detailItem.product_detail_id}</td>
                 <td>{detailItem.color ? detailItem.color.color_name : "Không có màu"}</td>
                 <td>{detailItem.size ? detailItem.size.size_name : "Không có kích thước"}</td>
-                <td >
+                <td>{detailItem.quantity || 0}</td>
+                <td>{detailItem.description || "Không có mô tả"}</td>
+                <td>
                   {detailItem.productImage ? (
                     <img src={`${API_URL}/img/${detailItem.productImage.img_url}`} alt="Sản phẩm" style={{ width: '80px', height: '80px' }} />
                   ) : (
                     "Không có hình ảnh"
                   )}
                 </td>
+                <td>{detailItem.isFeatured ? "Có" : "Không"}</td>
+                <td>{detailItem.isHot ? "Có" : "Không"}</td>
                 <td>
-                  <Link to={`/product/edit-product/${detailItem.product_detail_id}`} className="edit-btn"> Sửa</Link>
-                  <button
-                    className={`hide-btn-products ${detailItem.is_hidden ? 'show-text' : ''}`}
-                    onClick={() => hideProduct(detailItem.product_detail_id, detailItem.is_hidden)}
-                  >
+                  <Link to={`/admin/productdetaillist/edit-detail/${detailItem.product_detail_id}`} className="edit-btn">Sửa</Link>
+                  <button className={`hide-btn-products ${detailItem.is_hidden ? 'show-text' : ''}`}>
                     {detailItem.is_hidden ? "Hiện" : "Ẩn"}
                   </button>
                 </td>
@@ -126,7 +109,7 @@ function ProductDetailList() {
             ))
           ) : (
             <tr>
-              <td colSpan="5">Không có chi tiết sản phẩm</td>
+              <td colSpan="9">Không có chi tiết sản phẩm</td>
             </tr>
           )}
         </tbody>

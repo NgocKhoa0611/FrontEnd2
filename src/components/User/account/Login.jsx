@@ -2,21 +2,37 @@
 import { Link, useNavigate } from "react-router-dom";
 import React from 'react';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { z } from 'zod';  // Import Zod
 import axios from 'axios';
 import { API_URL } from "../../../../configs/varibles";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  // Định nghĩa schema Zod cho form validation
+  const loginSchema = z.object({
+    email: z.string().email('Email không hợp lệ').nonempty('Email là bắt buộc'),
+    password: z.string().nonempty('Mật khẩu là bắt buộc'),
+  });
+
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
-    validationSchema: Yup.object({
-      email: Yup.string().email('Email không hợp lệ').required('Bắt buộc'),
-      password: Yup.string().required('Bắt buộc'),
-    }),
+    validate: (values) => {
+      // Dùng Zod để validate dữ liệu
+      const result = loginSchema.safeParse(values);
+      if (!result.success) {
+        // Chuyển đổi các lỗi Zod thành thông báo lỗi cho formik
+        const errors = {};
+        result.error.errors.forEach((err) => {
+          errors[err.path[0]] = err.message;
+        });
+        return errors;
+      }
+      return {};
+    },
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
       try {
         const res = await axios.post(`${API_URL}/auth/login`, {
